@@ -7,12 +7,16 @@
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 
-(abbrev-mode t)
+;; auto load the file modify by others
+(global-auto-revert-mode 1)
+
+(setq-default abbrev-mode t)
 
 (define-abbrev-table 'global-abbrev-table '(
 					    ;; sigature
 					    ("sfl" "flyaif")
 					    ))
+
 ;; select and input will replace selected
 (delete-selection-mode 1)
 
@@ -65,6 +69,30 @@
   (interactive)
   (byte-recompile-directory "~/.emacs.d/lisp/" 0))
 
+(defun hidden-dos-eol()
+  "Do not show ^M in files contains mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
+
+;; (defun remove-dos-eol()
+;;  "Replace DOS eols with UNIX eols"
+;;  (interactive)
+;;  (goto-char (point-min))
+;;  (while (search-forward "\r" nil t) (replace-match "")))
+
+(defun remove-dos-eol()
+  "Replace DOS eols with UNIX eols"
+  (interactive)
+  (let ((count 0)))
+  (save-excursion
+    (progn
+      (goto-char (point-min))
+      (while (search-forward "\r" nil t)
+	(progn
+	  (replace-match "")
+	  (setq count (+ count 1))))
+      (message (format "total replace %d occures." count)))))
 
 ;; enhance hippie complete
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
@@ -80,6 +108,10 @@
 
 ;; use y/s instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(set-default-font "DejaVu Sans Mono 12")
+(set-fontset-font "fontset-default" 'unicode"WenQuanYi Bitmap Song 14") ;;for linux
+;; (set-fontset-font "fontset-default" 'unicode "宋体 12") ;; for windows
 
 ;; dired mode config
 (setq dired-recursive-copies 'always)

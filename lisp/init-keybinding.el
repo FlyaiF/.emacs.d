@@ -27,6 +27,13 @@
 ;; better complate
 (global-set-key (kbd "M-/") 'hippie-expand)
 
+;; expand-region
+(global-set-key (kbd "C-=") 'er/expand-region)
+
+(global-set-key (kbd "M-s o") 'occur-dwim)
+
+(global-set-key (kbd "M-s e") 'iedit-mode)
+
 (with-eval-after-load 'dired 
   (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file))
 
